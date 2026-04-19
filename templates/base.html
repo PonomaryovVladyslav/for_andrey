@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<div style="border: 2px yellow solid; padding: 30px" class="red">
+    Welcome to me site!
+</div>
+
+{% block content %}
+    <div>ТУТ КОНТЕНТ</div>
+{% endblock %}
+
+</body>
+
+{% block scripts %}
+{% endblock %}
+</html>
