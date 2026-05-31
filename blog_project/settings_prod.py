@@ -13,7 +13,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # SECURE_SSL_REDIRECT = True
 
 # Настройки для статики и медиа
-STATIC_ROOT = '/home/ubuntu/for_andrey/static/'
+# STATIC_ROOT (куда collectstatic собирает файлы) должен отличаться от
+# каталога с исходной статикой (STATICFILES_DIRS), иначе будет staticfiles.E002.
+STATIC_ROOT = '/home/ubuntu/for_andrey/staticfiles/'
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = '/home/ubuntu/for_andrey/media/'
