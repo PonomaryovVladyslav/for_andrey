@@ -1,10 +1,10 @@
 import os
 
 DEBUG = False
-ALLOWED_HOSTS = ['3.137.138.185']  # Замените на ваш IP-адрес
+ALLOWED_HOSTS = ['a-level-deploy.com']  # Замените на ваш IP-адрес
 
 # Security for reverse proxy/HTTPS
-CSRF_TRUSTED_ORIGINS = ['http://3.137.138.185', 'https://3.137.138.185']  # Замените на ваш IP
+CSRF_TRUSTED_ORIGINS = ['http://a-level-deploy.com', 'https://a-level-deploy.com']  # Замените на ваш IP
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Настройки безопасности для HTTPS (раскомментировать после настройки SSL)
