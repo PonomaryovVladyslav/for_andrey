@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Редактирование статьи{% else %}Новая статья{% endif %} — Мой блог{% endblock %}
+
+{% block content %}
+    <div class="card form-card wide reveal">
+        <h1>{% if object %}Редактирование статьи{% else %}Новая статья{% endif %}</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
+{% endblock %}

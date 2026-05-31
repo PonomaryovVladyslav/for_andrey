@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Темы — Мой блог{% endblock %}
+
+{% block content %}
+    <h1>Темы</h1>
+    <ul class="list">
+    {% for topic in topics %}
+        <li class="reveal">
+            <a class="article-title" href="{% url 'topic-detail' topic.id %}">#{{ topic.name }}</a>
+            {% if user.is_authenticated %}
+                {% if user in topic.subscribers.all %}
+                    <form method="post" action="{% url 'topic-unsubscribe' topic.id %}" class="inline-form">
+                        {% csrf_token %}<button type="submit" class="btn btn-ghost btn-sm">Отписаться</button>
+                    </form>
+                {% else %}
+                    <form method="post" action="{% url 'topic-subscribe' topic.id %}" class="inline-form">
+                        {% csrf_token %}<button type="submit" class="btn btn-primary btn-sm">Подписаться</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </li>
+    {% empty %}
+        <li class="empty-state">Тем пока нет.</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

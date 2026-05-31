@@ -1,26 +1,8 @@
 {% extends 'base.html' %}
-{% load rand_number %}
 
-{% block title %}Мой блог{% endblock %}
+{% block title %}Главная — Мой блог{% endblock %}
 
 {% block content %}
-    {% include 'add.html' with link='https://google.com' %}
-    <h1 style="color: brown; border: 1px aqua solid">Добро пожаловать в {{ site_name }}!</h1>
-
-    {% for article in articles %}
-        <div style="border: 2px {% cycle 'green' 'red' %} solid">{{ article.title|capfirst|truncatechars:10 }} {{ article.title|length }}
-            <div>{{ article.content }}</div>
-            <div style="color: {% if article.author == "Мария" %}red{% else %}blue{% endif %}">{{ article.author.username }}</div>
-
-            <br>
-        </div>
-    {% endfor %}
-    <a href="{% url 'about' %}">GO TO ABOUT</a>
-    <a href="{% url 'article-detail' 33 %}">GO TO ARTICLE 33</a>
-
-    {% now "jS F Y H:i" %}
-    {{ today|date:"d.m.Y" }}
-    <!-- AAAAA! -->
-    {% comment %} BBBBB! {% endcomment %}
-    <div>{% random_number 500 %}</div>
+    <h1>Все статьи</h1>
+    {% include '_articles.html' %}
 {% endblock %}

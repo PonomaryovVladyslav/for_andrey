@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль — Мой блог{% endblock %}
+
+{% block content %}
+    <div class="card reveal">
+        <h1>👤 {{ user.username }}</h1>
+        {% if user.email %}<p class="meta">{{ user.email }}</p>{% endif %}
+        <p><a href="{% url 'set-password' %}" class="btn btn-ghost btn-sm">🔒 Сменить пароль</a></p>
+    </div>
+
+    <h2>Мои подписки</h2>
+    <ul class="list">
+    {% for topic in subscribed_topics %}
+        <li class="reveal">
+            <a class="article-title" href="{% url 'topic-detail' topic.id %}">#{{ topic.name }}</a>
+            <form method="post" action="{% url 'topic-unsubscribe' topic.id %}" class="inline-form">
+                {% csrf_token %}<button type="submit" class="btn btn-ghost btn-sm">Отписаться</button>
+            </form>
+        </li>
+    {% empty %}
+        <li class="empty-state">Вы пока ни на что не подписаны. <a href="{% url 'topic-list' %}">Выбрать темы</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}

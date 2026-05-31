@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ article.title }} — Мой блог{% endblock %}
+
+{% block content %}
+    <article class="card reveal">
+        <h1>{{ article.title }}</h1>
+        <p class="meta">✍️ {{ article.author.username }} · {{ article.created_at|date:"d.m.Y H:i" }}</p>
+        <div class="topic-tags">
+            {% for topic in article.topics.all %}
+                <a class="tag" href="{% url 'topic-detail' topic.id %}">#{{ topic.name }}</a>
+            {% empty %}<span class="tag">#без-темы</span>{% endfor %}
+        </div>
+        <div class="content">{{ article.content|linebreaks }}</div>
+
+        {% if user == article.author %}
+            <div>
+                <a href="{% url 'article-update' article.id %}" class="btn btn-ghost btn-sm">✏️ Редактировать</a>
+                <a href="{% url 'article-delete' article.id %}" class="btn btn-ghost btn-sm">🗑 Удалить</a>
+            </div>
+        {% endif %}
+    </article>
+
+    <h2>Комментарии</h2>
+    {% for comment in article.comments.all %}
+        {% if not comment.parent %}
+            <div class="comment">
+                <strong>{{ comment.author.username }}</strong>
+                ({{ comment.created_at|date:"d.m.Y H:i" }}):
+                <div>{{ comment.text }}</div>
+                {% for reply in comment.replies.all %}
+                    <div class="comment reply" style="margin-left:30px">
+                        <strong>{{ reply.author.username }}</strong>
+                        ({{ reply.created_at|date:"d.m.Y H:i" }}):
+                        <div>{{ reply.text }}</div>
+                    </div>
+                {% endfor %}
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'article-comment' article.id %}" style="margin-left:30px;margin-top:10px">
+                        {% csrf_token %}
+                        <input type="hidden" name="parent" value="{{ comment.id }}">
+                        {{ comment_form.text }}
+                        <button type="submit" class="btn btn-ghost btn-sm">Ответить</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% empty %}
+        <div class="empty-state">Комментариев пока нет. Будьте первым!</div>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <div class="card reveal" style="margin-top:18px">
+            <h3 style="margin-top:0">Добавить комментарий</h3>
+            <form method="post" action="{% url 'article-comment' article.id %}">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+        </div>
+    {% else %}
+        <p class="empty-state"><a href="{% url 'login' %}">Войдите</a>, чтобы оставить комментарий.</p>
+    {% endif %}
+{% endblock %}

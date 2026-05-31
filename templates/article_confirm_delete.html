@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление статьи — Мой блог{% endblock %}
+
+{% block content %}
+    <div class="card form-card reveal">
+        <h1>Удалить статью «{{ object.title }}»?</h1>
+        <p class="meta">Это действие нельзя отменить.</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Да, удалить</button>
+            <a href="{% url 'article-detail' object.id %}" class="btn btn-ghost">Отмена</a>
+        </form>
+    </div>
+{% endblock %}

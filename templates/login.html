@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Вход — Мой блог{% endblock %}
+
+{% block content %}
+    <div class="card form-card reveal">
+        <h1>Вход</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="hidden" name="next" value="{{ next }}">
+            <button type="submit" class="btn btn-primary">Войти</button>
+        </form>
+        <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+    </div>
+{% endblock %}

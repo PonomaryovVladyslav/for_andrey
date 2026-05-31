@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация — Мой блог{% endblock %}
+
+{% block content %}
+    <div class="card form-card reveal">
+        <h1>Регистрация</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+        </form>
+        <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+    </div>
+{% endblock %}

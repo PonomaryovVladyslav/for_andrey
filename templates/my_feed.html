@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Моя лента — Мой блог{% endblock %}
+
+{% block content %}
+    <h1>Моя лента</h1>
+    {% if articles %}
+        {% include '_articles.html' %}
+    {% else %}
+        <div class="empty-state">
+            <p>Здесь пока пусто: вы не подписаны на темы или по ним нет статей.</p>
+            <a href="{% url 'topic-list' %}" class="btn btn-primary btn-sm">Перейти к списку тем</a>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Тема: {{ topic.name }} — Мой блог{% endblock %}
+
+{% block content %}
+    <h1>#{{ topic.name }}</h1>
+    {% if user.is_authenticated %}
+        {% if user in topic.subscribers.all %}
+            <form method="post" action="{% url 'topic-unsubscribe' topic.id %}" class="inline-form">
+                {% csrf_token %}<button type="submit" class="btn btn-ghost btn-sm">Отписаться</button>
+            </form>
+        {% else %}
+            <form method="post" action="{% url 'topic-subscribe' topic.id %}" class="inline-form">
+                {% csrf_token %}<button type="submit" class="btn btn-primary btn-sm">Подписаться</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+    <h2>Статьи по теме</h2>
+    {% with articles=topic.articles.all %}
+        {% include '_articles.html' %}
+    {% endwith %}
+{% endblock %}

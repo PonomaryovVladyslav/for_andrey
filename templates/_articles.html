@@ -1,0 +1,13 @@
+{% for article in articles %}
+    <article class="card article-item reveal">
+        <a class="article-title" href="{% url 'article-detail' article.id %}">{{ article.title|truncatechars:50 }}</a>
+        <div class="article-meta">✍️ {{ article.author.username }} · {{ article.created_at|date:"d.m.Y" }}</div>
+        <div class="topic-tags">
+            {% for topic in article.topics.all %}
+                <a class="tag" href="{% url 'topic-detail' topic.id %}">#{{ topic.name }}</a>
+            {% empty %}<span class="tag">#без-темы</span>{% endfor %}
+        </div>
+    </article>
+{% empty %}
+    <div class="empty-state">Статей пока нет.</div>
+{% endfor %}

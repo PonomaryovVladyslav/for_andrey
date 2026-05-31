@@ -1,20 +1,24 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
+from django.utils.text import slugify
 
-
-class TopicManager(models.Manager):
-    def get_blabla(self):
-        return self.filter(name='blabla')
 
 class Topic(models.Model):
     """Тема/категория для статей"""
-    name = models.CharField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True)
-    my_manager = TopicManager()
+    name = models.CharField('Название', max_length=100)
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
+    subscribers = models.ManyToManyField(
+        User,
+        related_name='subscribed_topics',
+        blank=True,
+    )
 
-    def save(self, *args, **kwargs):
-        print("AAAAAAAA")
-        return super().save(*args, **kwargs)
+    class Meta:
+        ordering = ['name']
+
+    def get_absolute_url(self):
+        return reverse('topic-detail', args=[self.pk])
 
     def __str__(self):
         return self.name
@@ -27,14 +31,31 @@ class Article(models.Model):
         PUBLISHED = 'published', 'Опубликовано'
         ARCHIVED = 'archived', 'В архиве'
 
-    title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, unique=True)
-    content = models.TextField()
+    title = models.CharField('Заголовок', max_length=200)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    content = models.TextField('Содержание')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles')
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.DRAFT)
-    topics = models.ManyToManyField(Topic, related_name='articles')
+    topics = models.ManyToManyField(Topic, related_name='articles', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def get_absolute_url(self):
+        return reverse('article-detail', args=[self.pk])
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.title, allow_unicode=True) or 'article'
+            slug = base
+            counter = 1
+            while Article.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                counter += 1
+                slug = f'{base}-{counter}'
+            self.slug = slug
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -54,16 +75,11 @@ class Comment(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['created_at']
+
     def __str__(self):
         return f'Комментарий от {self.author.username}'
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            pass
-        return super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        return super().delete(*args, **kwargs)
 
 
 class Profile(models.Model):

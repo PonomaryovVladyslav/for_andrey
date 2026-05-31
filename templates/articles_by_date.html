@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Статьи за {{ month }}.{{ year }} — Мой блог{% endblock %}
+
+{% block content %}
+    <h1>Статьи за {{ month }}.{{ year }}</h1>
+    {% if articles %}
+        {% include '_articles.html' %}
+    {% else %}
+        <div class="empty-state">
+            <p>За этот месяц статей нет.</p>
+            <a href="{% url 'home' %}" class="btn btn-primary btn-sm">Вернуться на главную</a>
+        </div>
+    {% endif %}
+{% endblock %}
