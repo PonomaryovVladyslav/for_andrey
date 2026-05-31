@@ -13,10 +13,10 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # SECURE_SSL_REDIRECT = True
 
 # Настройки для статики и медиа
-STATIC_ROOT = '/home/ubuntu/blog_project/static/'
+STATIC_ROOT = '/home/ubuntu/for_andrey/static/'
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/home/ubuntu/blog_project/media/'
+MEDIA_ROOT = '/home/ubuntu/for_andrey/media/'
 MEDIA_URL = '/media/'
 
 # Максимальный размер загружаемых файлов (100MB)
